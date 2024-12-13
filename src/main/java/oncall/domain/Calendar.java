@@ -1,5 +1,7 @@
 package oncall.domain;
 
+import java.util.Arrays;
+
 public enum Calendar {
     JANUARY(1, 31),
     FEBRUARY(2, 28),
@@ -22,4 +24,10 @@ public enum Calendar {
         this.lastDate = lastDate;
     }
 
+    public static boolean isIn(String inputMonth) {
+        int monthNumber = Integer.parseInt(inputMonth);
+        return Arrays.stream(values())
+                .map(calendar -> calendar.month)
+                .anyMatch(month -> month == monthNumber);
+    }
 }
