@@ -10,6 +10,7 @@ public class Employees {
 
     public Employees(List<String> employeeNames) {
         validateDuplicate(employeeNames);
+        validateSize(employeeNames);
         this.employees = employeeNames.stream()
                 .map(Employee::new)
                 .toList();
@@ -18,8 +19,14 @@ public class Employees {
     private void validateDuplicate(List<String> employeeNames) {
         employeeNames.forEach(employeeName -> {
             if (Collections.frequency(employeeNames, employeeName) >= 2) {
-                throw new IllegalArgumentException(ErrorMessage.PREFIX + "중복된 닉네임의 근무자입니다.");
+                throw new IllegalArgumentException(ErrorMessage.PREFIX + "유효하지 않은 입력 값입니다. 다시 입력해 주세요.");
             }
         });
+    }
+
+    private void validateSize(List<String> employeeNames) {
+        if (employeeNames.size() < 5 || employeeNames.size() > 35) {
+            throw new IllegalArgumentException(ErrorMessage.PREFIX + "유효하지 않은 입력 값입니다. 다시 입력해 주세요.");
+        }
     }
 }
