@@ -12,5 +12,23 @@ public class Schedule {
         this.isRestDay = isRestDay;
     }
 
+    public String getName() {
+        return name;
+    }
 
+    public int getDay() {
+        return day;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public boolean isRestDay() {
+        return isRestDay;
+    }
+
+    public void addEmployee(String name) {
+        this.name = name;
+    }
 }

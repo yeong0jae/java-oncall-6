@@ -23,7 +23,18 @@ public class OncallService {
             schedules.add(new Schedule(i, days.get(i - 1), isRestDay)); // 1~31, 목,금,, t/f
         }
 
+        setSchedules(schedules, weekdayEmployees, weekendEmployees);
+    }
 
+    private void setSchedules(List<Schedule> schedules,
+                              Employees weekdayEmployees, Employees weekendEmployees) {
+        schedules.forEach(schedule -> {
+            if (!schedule.isRestDay()) {
+                schedule.addEmployee(weekdayEmployees.popEmploy());
+            } else {
+                schedule.addEmployee(weekendEmployees.popEmploy());
+            }
+        });
     }
 
     private boolean isRestDay(int month, int day, String date) {

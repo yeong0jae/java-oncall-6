@@ -1,19 +1,27 @@
 package oncall.domain;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import oncall.util.ErrorMessage;
 
 public class Employees {
 
-    private final List<Employee> employees;
+    private List<Employee> employees = new ArrayList<>();
 
     public Employees(List<String> employeeNames) {
         validateDuplicate(employeeNames);
         validateSize(employeeNames);
-        this.employees = employeeNames.stream()
-                .map(Employee::new)
-                .toList();
+        employeeNames.forEach(employeeName ->
+                this.employees.add(new Employee(employeeName))
+        );
+    }
+
+    public String popEmploy() {
+        String name = employees.get(0).getName();
+        employees.remove(0);
+        employees.add(new Employee(name));
+        return name;
     }
 
     private void validateDuplicate(List<String> employeeNames) {
