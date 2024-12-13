@@ -1,7 +1,8 @@
 package oncall.controller;
 
+import static oncall.controller.RetryController.retryUntilValid;
+
 import java.util.List;
-import java.util.function.Supplier;
 import oncall.OncallService;
 import oncall.domain.Employees;
 import oncall.domain.Schedule;
@@ -56,13 +57,4 @@ public class OncallController {
         return new Employees(inputWeekdayEmployees);
     }
 
-    private static <T> T retryUntilValid(Supplier<T> supplier) {
-        while (true) {
-            try {
-                return supplier.get();
-            } catch (IllegalArgumentException e) {
-                System.out.println(e.getMessage());
-            }
-        }
-    }
 }
