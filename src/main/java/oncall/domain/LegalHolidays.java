@@ -1,5 +1,7 @@
 package oncall.domain;
 
+import java.util.Arrays;
+
 public enum LegalHolidays {
     THEOCRACY(1, 1),
     THREE_ONE(3, 1),
@@ -17,5 +19,17 @@ public enum LegalHolidays {
         this.month = month;
         this.date = date;
     }
-    
+
+    public static boolean isIn(int month, int day) {
+        return Arrays.stream(values())
+                .anyMatch(holiday -> holiday.getMonth() == month && holiday.getDate() == day);
+    }
+
+    public int getMonth() {
+        return month;
+    }
+
+    public int getDate() {
+        return date;
+    }
 }

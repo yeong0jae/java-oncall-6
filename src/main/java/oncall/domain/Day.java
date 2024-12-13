@@ -31,6 +31,11 @@ public enum Day {
         return days;
     }
 
+    public static boolean isWeekend(String date) {
+        return valueOf("WEEKENDS").date.stream()
+                .anyMatch(it -> it.equals(date));
+    }
+
     public List<String> getDate() {
         return date;
     }
