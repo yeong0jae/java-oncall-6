@@ -24,6 +24,17 @@ public class Employees {
         return name;
     }
 
+    public String getNameFirst() {
+        return employees.get(0).getName();
+    }
+
+    public void shuffle() {
+        Employee employee1 = employees.get(0);
+        Employee employee2 = employees.get(1);
+        employees.set(0, employee2);
+        employees.set(1, employee1);
+    }
+
     private void validateDuplicate(List<String> employeeNames) {
         employeeNames.forEach(employeeName -> {
             if (Collections.frequency(employeeNames, employeeName) >= 2) {
@@ -37,4 +48,5 @@ public class Employees {
             throw new IllegalArgumentException(ErrorMessage.PREFIX + "유효하지 않은 입력 값입니다. 다시 입력해 주세요.");
         }
     }
+
 }

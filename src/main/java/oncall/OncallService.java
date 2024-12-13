@@ -11,7 +11,7 @@ import oncall.domain.StartDay;
 
 public class OncallService {
 
-    public void assign(StartDay startDay, Employees weekdayEmployees, Employees weekendEmployees) {
+    public List<Schedule> assign(StartDay startDay, Employees weekdayEmployees, Employees weekendEmployees) {
         int month = startDay.getMonth(); // 5
         int endDate = Calendar.getEndDateOf(month); // 31
 
@@ -23,18 +23,32 @@ public class OncallService {
             schedules.add(new Schedule(i, days.get(i - 1), isRestDay)); // 1~31, 목,금,, t/f
         }
 
-        setSchedules(schedules, weekdayEmployees, weekendEmployees);
+        return setSchedules(schedules, weekdayEmployees, weekendEmployees);
     }
 
-    private void setSchedules(List<Schedule> schedules,
-                              Employees weekdayEmployees, Employees weekendEmployees) {
-        schedules.forEach(schedule -> {
+    private List<Schedule> setSchedules(List<Schedule> schedules,
+                                        Employees weekdayEmployees, Employees weekendEmployees) {
+        for (int i = 0; i < schedules.size(); i++) {
+            Schedule schedule = schedules.get(i);
+            String preEmployeeName;
+            if (i == 0) {
+                preEmployeeName = "";
+            } else {
+                preEmployeeName = schedules.get(i - 1).getName();
+            }
             if (!schedule.isRestDay()) {
+                if (preEmployeeName.equals(weekdayEmployees.getNameFirst())) {
+                    weekdayEmployees.shuffle();
+                }
                 schedule.addEmployee(weekdayEmployees.popEmploy());
             } else {
+                if (preEmployeeName.equals(weekendEmployees.getNameFirst())) {
+                    weekendEmployees.shuffle();
+                }
                 schedule.addEmployee(weekendEmployees.popEmploy());
             }
-        });
+        }
+        return schedules;
     }
 
     private boolean isRestDay(int month, int day, String date) {

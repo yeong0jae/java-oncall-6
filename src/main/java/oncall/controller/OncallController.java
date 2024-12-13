@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.function.Supplier;
 import oncall.OncallService;
 import oncall.domain.Employees;
+import oncall.domain.Schedule;
 import oncall.domain.StartDay;
 import oncall.view.InputView;
 import oncall.view.OutputView;
@@ -28,7 +29,8 @@ public class OncallController {
         Employees weekdayEmployees = getWeekdayEmployees();
         Employees weekendEmployees = getWeekendEmployees();
 
-        oncallService.assign(startDay, weekdayEmployees, weekendEmployees);
+        List<Schedule> schedules = oncallService.assign(startDay, weekdayEmployees, weekendEmployees);
+        outputView.printSchedules(startDay.getMonth(), schedules);
     }
 
     private Employees getWeekendEmployees() {
