@@ -15,4 +15,8 @@ public class Employee {
             throw new IllegalArgumentException(ErrorMessage.PREFIX + "유효하지 않은 입력 값입니다. 다시 입력해 주세요.");
         }
     }
+
+    public String getName() {
+        return name;
+    }
 }
