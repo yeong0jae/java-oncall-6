@@ -21,30 +21,39 @@ public class OncallController {
     }
 
     public void run() {
-        StartDay startDay = retryUntilValid(() -> {
-            List<String> inputStartDay = inputView.readStartDay();
-            return new StartDay(inputStartDay);
-        });
+        StartDay startDay = getStartDay();
 
-        Employees weekdayEmployees = getWeekdayEmployees();
-        Employees weekendEmployees = getWeekendEmployees();
+        Employees weekdayEmployees;
+        Employees weekendEmployees;
+        while (true) {
+            try {
+                weekdayEmployees = getWeekdayEmployees();
+                weekendEmployees = getWeekendEmployees();
+                break;
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+            }
+        }
 
         List<Schedule> schedules = oncallService.assign(startDay, weekdayEmployees, weekendEmployees);
         outputView.printSchedules(startDay.getMonth(), schedules);
     }
 
-    private Employees getWeekendEmployees() {
+    private StartDay getStartDay() {
         return retryUntilValid(() -> {
-            List<String> inputWeekendEmployees = inputView.readWeekendEmployees();
-            return new Employees(inputWeekendEmployees);
+            List<String> inputStartDay = inputView.readStartDay();
+            return new StartDay(inputStartDay);
         });
     }
 
+    private Employees getWeekendEmployees() {
+        List<String> inputWeekendEmployees = inputView.readWeekendEmployees();
+        return new Employees(inputWeekendEmployees);
+    }
+
     private Employees getWeekdayEmployees() {
-        return retryUntilValid(() -> {
-            List<String> inputWeekdayEmployees = inputView.readWeekdayEmployees();
-            return new Employees(inputWeekdayEmployees);
-        });
+        List<String> inputWeekdayEmployees = inputView.readWeekdayEmployees();
+        return new Employees(inputWeekdayEmployees);
     }
 
     private static <T> T retryUntilValid(Supplier<T> supplier) {
