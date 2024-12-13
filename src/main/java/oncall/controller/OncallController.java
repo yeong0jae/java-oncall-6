@@ -2,6 +2,7 @@ package oncall.controller;
 
 import java.util.List;
 import java.util.function.Supplier;
+import oncall.domain.Employees;
 import oncall.domain.StartDay;
 import oncall.view.InputView;
 import oncall.view.OutputView;
@@ -21,7 +22,13 @@ public class OncallController {
             List<String> inputStartDay = inputView.readStartDay();
             return new StartDay(inputStartDay);
         });
-        
+
+        List<String> inputWeekdayEmployees = inputView.readWeekdayEmployees();
+        Employees weekdayEmployees = new Employees(inputWeekdayEmployees);
+
+        List<String> inputWeekendEmployees = inputView.readWeekendEmployees();
+        Employees weekendEmployees = new Employees(inputWeekendEmployees);
+
     }
 
     private static <T> T retryUntilValid(Supplier<T> supplier) {
