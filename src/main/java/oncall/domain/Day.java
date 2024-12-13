@@ -1,17 +1,15 @@
 package oncall.domain;
 
+import java.util.List;
+
 public enum Day {
-    MON("월"),
-    TUE("화"),
-    WEN("수"),
-    THU("목"),
-    FRI("금"),
-    SAT("토"),
-    SUN("일");
+    WEEKDAYS(List.of("월", "화", "수", "목", "금")),
+    WEEKENDS(List.of("토", "일"));
 
-    private final String dateName;
+    private final List<String> date;
 
-    Day(String dateName) {
-        this.dateName = dateName;
+    Day(List<String> date) {
+        this.date = date;
     }
+    
 }
