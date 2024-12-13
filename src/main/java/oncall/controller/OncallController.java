@@ -2,6 +2,7 @@ package oncall.controller;
 
 import java.util.List;
 import java.util.function.Supplier;
+import oncall.OncallService;
 import oncall.domain.Employees;
 import oncall.domain.StartDay;
 import oncall.view.InputView;
@@ -11,6 +12,7 @@ public class OncallController {
 
     private final InputView inputView;
     private final OutputView outputView;
+    private final OncallService oncallService = new OncallService();
 
     public OncallController(InputView inputView, OutputView outputView) {
         this.inputView = inputView;
@@ -23,12 +25,24 @@ public class OncallController {
             return new StartDay(inputStartDay);
         });
 
-        List<String> inputWeekdayEmployees = inputView.readWeekdayEmployees();
-        Employees weekdayEmployees = new Employees(inputWeekdayEmployees);
+        Employees weekdayEmployees = getWeekdayEmployees();
+        Employees weekendEmployees = getWeekendEmployees();
 
-        List<String> inputWeekendEmployees = inputView.readWeekendEmployees();
-        Employees weekendEmployees = new Employees(inputWeekendEmployees);
+        oncallService.assign(startDay, weekdayEmployees, weekendEmployees);
+    }
 
+    private Employees getWeekendEmployees() {
+        return retryUntilValid(() -> {
+            List<String> inputWeekendEmployees = inputView.readWeekendEmployees();
+            return new Employees(inputWeekendEmployees);
+        });
+    }
+
+    private Employees getWeekdayEmployees() {
+        return retryUntilValid(() -> {
+            List<String> inputWeekdayEmployees = inputView.readWeekdayEmployees();
+            return new Employees(inputWeekdayEmployees);
+        });
     }
 
     private static <T> T retryUntilValid(Supplier<T> supplier) {

@@ -30,4 +30,19 @@ public enum Calendar {
                 .map(calendar -> calendar.month)
                 .anyMatch(month -> month == monthNumber);
     }
+
+    public static int getEndDateOf(int startMonth) {
+        return Arrays.stream(values())
+                .filter(calendar -> calendar.getMonth() == startMonth)
+                .findFirst()
+                .get().getLastDate();
+    }
+
+    public int getLastDate() {
+        return lastDate;
+    }
+
+    public int getMonth() {
+        return month;
+    }
 }
